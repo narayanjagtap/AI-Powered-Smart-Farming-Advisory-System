@@ -1,8 +1,3 @@
-Perfect 👍 This project is solid, so a **good README will really boost your GitHub profile**.
-Below is a **detailed, professional, and recruiter-friendly README.md** you can directly copy–paste and push to GitHub.
-
----
-
 # 🌾 AI-Powered Smart Farming Advisory System
 
 An AI-driven, multilingual web application designed to assist Indian farmers with practical agricultural guidance. The system enables farmers to interact with an AI advisor, ask farming-related questions, and receive a consolidated solution via email — all through a simple, farmer-friendly interface.
