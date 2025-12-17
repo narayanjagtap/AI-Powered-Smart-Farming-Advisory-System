@@ -74,8 +74,13 @@ The application is designed especially for **rural Indian farmers**, supporting 
 Language selection is done before the conversation starts.
 The selected language is dynamically injected into the AI system prompt, ensuring:
 
-* Chat responses in the selected language
-* Final email summary in the same language
-* No external translation API required
+---
 
+## 📸 Project Screenshots
+
+### 🔹 Farmer Details & Language Selection
+![Farmer Details Screen](UI/landing-page.png)
+
+### 🔹 AI Chat & Advisory Interface
+![AI Chat Interface](UI/chat-interface.png)
 
