@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Farming Advisory</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon1.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>Smart Farming Advisory System</h1>
+                <p>AI-Powered Farming Guidance Platform</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="alertContainer"></div>
+
+            <div id="farmerForm" class="farmer-form">
+                <div class="form-card">
+                    <h2>Welcome! Let's get started.</h2>
+                    
+                    <div class="form-group">
+                        <label for="farmerName">Name</label>
+                        <input type="text" id="farmerName" placeholder="Ex: Rahul Kumar" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="farmerEmail">Email</label>
+                        <input type="email" id="farmerEmail" placeholder="name@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="problemType">Topic</label>
+                        <select id="problemType" required>
+                            <option value="">-- Select Topic --</option>
+                            <option value="Crop Disease">Crop Disease (फसल रोग)</option>
+                            <option value="Pest Control">Pest Control (कीट नियंत्रण)</option>
+                            <option value="Irrigation">Irrigation (सिंचाई)</option>
+                            <option value="Fertilizer">Fertilizer (खाद)</option>
+                            <option value="Weather">Weather Advisory (मौसम)</option>
+                            <option value="Other">Other (अन्य)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="language">Language</label>
+                        <select id="language" required>
+                            <option value="ENGLISH">English</option>
+                            <option value="HINDI">Hindi (हिंदी)</option>
+                            <option value="MARATHI">Marathi (मराठी)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="initializeFarmer()" id="startBtn">
+                        Start Consulting
+                    </button>
+                </div>
+            </div>
+
+            <div id="chatSection" class="chat-section">
+                <div class="farmer-info" id="farmerInfo"></div>
+
+                <div class="chat-container" id="chatContainer">
+                    <div class="empty-state">
+                        <img src="https://cdn-icons-png.flaticon.com/512/628/628283.png" alt="Sprout" class="empty-state-img">
+                        <div class="empty-state-text">
+                            <h3>Hello! / नमस्ते!</h3>
+                            <p>Ask me about your crops, soil, or irrigation.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="typing-dots"><span></span><span></span><span></span></div>
+                </div>
+
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chatInput" 
+                           placeholder="Type your question here..." 
+                           onkeypress="handleKeyPress(event)">
+                    <button class="btn-send" onclick="sendMessage()" id="sendBtn">➤</button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-success" onclick="getFinalSolution()" id="solutionBtn">
+                        📩 Get Summary Email
+                    </button>
+                    <button class="btn btn-danger" onclick="resetSession()" id="resetBtn">
+                        New Chat
+                    </button>
+                </div>
+            </div>
+
+            <div class="loading" id="loadingIndicator">
+                <div class="spinner"></div>
+                <div class="loading-text">Analyzing Farm Data...</div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
