@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Smart Farming Advisory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .payment-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .payment-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input[type="text"]::placeholder {
+            color: #999;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .payment-methods {
+            margin-bottom: 25px;
+        }
+
+        .payment-methods label {
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .method-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .method-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .method-option:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+
+        .method-option input[type="radio"] {
+            width: auto;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .method-option label {
+            margin: 0;
+            flex: 1;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .summary {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            border-top: 2px solid #ddd;
+            padding-top: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .btn-container {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .security-info {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .security-info::before {
+            content: "🔒";
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 4px solid #c33;
+            display: none;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 4px solid #3c3;
+            display: none;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 480px) {
+            .payment-container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="header">
+            <h1>🌾 Smart Farming Payment</h1>
+            <p>Complete your subscription for premium advisory services</p>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+
+        <div class="payment-info">
+            <div class="info-row">
+                <span class="info-label">Service Type:</span>
+                <span class="info-value" id="serviceType">Premium Subscription</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Duration:</span>
+                <span class="info-value" id="duration">12 Months</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Plan:</span>
+                <span class="info-value" id="planName">Professional</span>
+            </div>
+        </div>
+
+        <form id="paymentForm" method="POST">
+            <div class="form-group">
+                <label for="fullName">Full Name *</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" pattern="[0-9]{10}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address *</label>
+                <input type="text" id="address" name="address" placeholder="Enter your address" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city">City *</label>
+                    <input type="text" id="city" name="city" placeholder="City" required>
+                </div>
+                <div class="form-group">
+                    <label for="state">State *</label>
+                    <input type="text" id="state" name="state" placeholder="State" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="zipcode">Zip Code *</label>
+                    <input type="text" id="zipcode" name="zipcode" placeholder="Zip Code" pattern="[0-9]{6}" required>
+                </div>
+                <div class="form-group">
+                    <label for="country">Country *</label>
+                    <input type="text" id="country" name="country" placeholder="Country" required>
+                </div>
+            </div>
+
+            <div class="payment-methods">
+                <label>Payment Method *</label>
+                <div class="method-options">
+                    <div class="method-option">
+                        <input type="radio" id="upi" name="paymentMethod" value="upi" checked>
+                        <label for="upi">UPI</label>
+                    </div>
+                    <div class="method-option">
+                        <input type="radio" id="card" name="paymentMethod" value="card">
+                        <label for="card">Credit/Debit Card</label>
+                    </div>
+                    <div class="method-option">
+                        <input type="radio" id="netbanking" name="paymentMethod" value="netbanking">
+                        <label for="netbanking">Net Banking</label>
+                    </div>
+                    <div class="method-option">
+                        <input type="radio" id="wallet" name="paymentMethod" value="wallet">
+                        <label for="wallet">Digital Wallet</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary">
+                <div class="summary-row">
+                    <span>Plan Price:</span>
+                    <span id="planPrice">₹4,999.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax (18% GST):</span>
+                    <span id="taxAmount">₹899.82</span>
+                </div>
+                <div class="summary-row">
+                    <span>Discount:</span>
+                    <span id="discount">₹0.00</span>
+                </div>
+                <div class="summary-total">
+                    <span>Total Amount:</span>
+                    <span id="totalAmount">₹5,898.82</span>
+                </div>
+            </div>
+
+            <input type="hidden" id="orderId" name="orderId">
+            <input type="hidden" id="amount" name="amount" value="589882">
+            <input type="hidden" id="currency" name="currency" value="INR">
+
+            <div class="btn-container">
+                <button type="button" class="btn btn-primary" id="paymentBtn" onclick="processPayment()">
+                    <span id="btnText">Pay Now with Razorpay</span>
+                    <div class="loading-spinner" id="spinner"></div>
+                </button>
+                <a href="/" class="btn btn-secondary">Cancel</a>
+            </div>
+
+            <div class="security-info">
+                Your payment is secure and encrypted
+            </div>
+        </form>
+    </div>
+
+    <!-- Razorpay Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
+    <script>
+        // Initialize Razorpay configuration
+        const RAZORPAY_CONFIG = {
+            key: '[[${razorpayKey}]]', // Replace with your Razorpay Key ID
+            currency: 'INR',
+            theme: {
+                color: '#667eea'
+            }
+        };
+
+        // Generate Order ID
+        function generateOrderId() {
+            const timestamp = Date.now();
+            const random = Math.floor(Math.random() * 1000);
+            return `ORDER_${timestamp}_${random}`;
+        }
+
+        // Validate form
+        function validateForm() {
+            const form = document.getElementById('paymentForm');
+            if (!form.checkValidity()) {
+                showError('Please fill in all required fields correctly');
+                return false;
+            }
+
+            const phone = document.getElementById('phone').value;
+            if (phone.length !== 10) {
+                showError('Phone number must be 10 digits');
+                return false;
+            }
+
+            const zipcode = document.getElementById('zipcode').value;
+            if (zipcode.length !== 6) {
+                showError('Zip code must be 6 digits');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Process payment
+        function processPayment() {
+            if (!validateForm()) {
+                return;
+            }
+
+            const paymentBtn = document.getElementById('paymentBtn');
+            const spinner = document.getElementById('spinner');
+            const btnText = document.getElementById('btnText');
+
+            paymentBtn.disabled = true;
+            spinner.style.display = 'block';
+            btnText.textContent = 'Processing...';
+
+            // Get form data
+            const formData = {
+                orderId: generateOrderId(),
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                zipcode: document.getElementById('zipcode').value,
+                country: document.getElementById('country').value,
+                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
+                amount: document.getElementById('amount').value,
+                currency: 'INR'
+            };
+
+            // Set order ID in form
+            document.getElementById('orderId').value = formData.orderId;
+
+            // Initiate Razorpay payment
+            const options = {
+                key: RAZORPAY_CONFIG.key,
+                amount: parseInt(formData.amount),
+                currency: formData.currency,
+                name: 'Smart Farming Advisory',
+                description: 'Premium Subscription',
+                order_id: formData.orderId,
+                prefill: {
+                    name: formData.fullName,
+                    email: formData.email,
+                    contact: formData.phone
+                },
+                theme: RAZORPAY_CONFIG.theme,
+                handler: function(response) {
+                    handlePaymentSuccess(response, formData);
+                },
+                modal: {
+                    ondismiss: function() {
+                        paymentBtn.disabled = false;
+                        spinner.style.display = 'none';
+                        btnText.textContent = 'Pay Now with Razorpay';
+                        showError('Payment was cancelled. Please try again.');
+                    }
+                }
+            };
+
+            try {
+                const rzp = new Razorpay(options);
+                rzp.open();
+            } catch (error) {
+                console.error('Razorpay Error:', error);
+                showError('Failed to initiate payment. Please try again.');
+                paymentBtn.disabled = false;
+                spinner.style.display = 'none';
+                btnText.textContent = 'Pay Now with Razorpay';
+            }
+        }
+
+        // Handle payment success
+        function handlePaymentSuccess(response, formData) {
+            const paymentBtn = document.getElementById('paymentBtn');
+            const spinner = document.getElementById('spinner');
+            const btnText = document.getElementById('btnText');
+
+            // Send payment details to server
+            fetch('/api/payment/verify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': getCsrfToken()
+                },
+                body: JSON.stringify({
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature,
+                    ...formData
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                spinner.style.display = 'none';
+                btnText.textContent = 'Pay Now with Razorpay';
+                
+                if (data.success) {
+                    showSuccess('Payment successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = '/payment-success?orderId=' + formData.orderId;
+                    }, 2000);
+                } else {
+                    showError(data.message || 'Payment verification failed');
+                    paymentBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('An error occurred while processing your payment');
+                paymentBtn.disabled = false;
+                spinner.style.display = 'none';
+                btnText.textContent = 'Pay Now with Razorpay';
+            });
+        }
+
+        // Get CSRF token from meta tag or cookie
+        function getCsrfToken() {
+            const token = document.querySelector('meta[name="_csrf"]');
+            if (token) {
+                return token.getAttribute('content');
+            }
+            return '';
+        }
+
+        // Update total amount calculation
+        function updateTotalAmount() {
+            const basePrice = 4999.00;
+            const gst = basePrice * 0.18;
+            const total = Math.round((basePrice + gst) * 100);
+            
+            document.getElementById('planPrice').textContent = '₹' + basePrice.toFixed(2);
+            document.getElementById('taxAmount').textContent = '₹' + gst.toFixed(2);
+            document.getElementById('totalAmount').textContent = '₹' + (basePrice + gst).toFixed(2);
+            document.getElementById('amount').value = total;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTotalAmount();
+
+            // Add animation on scroll
+            const container = document.querySelector('.payment-container');
+            container.style.opacity = '1';
+        });
+
+        // Prevent form submission
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            processPayment();
+        });
+    </script>
+</body>
+</html>
