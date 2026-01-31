@@ -1,4 +1,4 @@
-# 🌾 AI-Powered Smart Farming Advisory System
+# 🌾 AI-Powered Smart Farming Advisory System  [![Java CI](https://github.com/narayanjagtap/AI-Powered-Smart-Farming-Advisory-System/actions/workflows/maven.yml/badge.svg)](https://github.com/narayanjagtap/AI-Powered-Smart-Farming-Advisory-System/actions/workflows/maven.yml)
 
 An AI-driven, multilingual web application designed to assist Indian farmers with practical agricultural guidance. The system enables farmers to interact with an AI advisor, ask farming-related questions, and receive a consolidated solution via email — all through a simple, farmer-friendly interface.
 
